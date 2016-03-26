@@ -2,9 +2,9 @@ using Akka.Actor;
 
 namespace MyFileDB.Core.Messages
 {
-    public class FileContentMessage
+    public class FileContentUpdateMessage
     {
-        public FileContentMessage(string fileName, string fileContent, IActorRef callBackActorRef)
+        public FileContentUpdateMessage(string fileName, string fileContent, IActorRef callBackActorRef)
         {
             FileName = fileName;
             FileContent = fileContent;

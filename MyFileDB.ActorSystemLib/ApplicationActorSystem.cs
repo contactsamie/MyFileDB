@@ -14,6 +14,14 @@ namespace MyFileDB.ActorSystemLib
 
         public static void Create<T>(IContainer container, ActorSystem actorSystem=null) where T : ActorBase
         {
+            /*
+            When you create an actor through the DI subsystem, 
+            and you pass it Props of type ProductActor. The DI 
+            subsystem looks up the ActorType in the DI container 
+            and resolves its dependencies, which then get passed into the 
+            Actor Creation pipeline. Which in turn creates the ProductActor with the dependencies for you.
+            ....from @Danthar
+            */
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies()).Where(t => typeof(ReceiveActor).IsAssignableFrom(t));
             builder.Update(container);

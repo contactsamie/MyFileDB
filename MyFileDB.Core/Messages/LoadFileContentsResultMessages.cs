@@ -4,11 +4,11 @@ namespace MyFileDB.Core.Messages
 {
     public class LoadFileContentsResultMessages
     {
-        public LoadFileContentsResultMessages(List<FileContentMessage> fileContentMessages)
+        public LoadFileContentsResultMessages(List<FileContentUpdateMessage> fileContentMessages)
         {
             FileContentMessages = fileContentMessages;
         }
 
-        public List<FileContentMessage> FileContentMessages { get; private set; }
+        public List<FileContentUpdateMessage> FileContentMessages { get; private set; }
     }
 }

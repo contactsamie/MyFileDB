@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace MyFileDB.Core.Messages
 {
-    public class LoadFileContentMessages
+    public class LoadAllFileContentMessage
     {
-        public LoadFileContentMessages(List<LoadFileContentMessage> fileContentMessages)
+        public LoadAllFileContentMessage(List<LoadFileContentMessage> fileContentMessages)
         {
             FileContentMessages = fileContentMessages;
         }

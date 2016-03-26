@@ -1,6 +1,7 @@
 using Autofac;
 using System;
-using MyFileDB.Core.Services;
+using MyFileDB.Common.Services;
+
 
 namespace MyFileDB.DependencyLib
 {

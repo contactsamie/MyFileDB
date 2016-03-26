@@ -12,18 +12,24 @@ namespace MyFileDB.Core
 
         public SystemActor()
         {
+            //pinginh
             Receive<PingMessage>(message => Sender.Tell(new PongMessage()));
 
+            //storing
             FileStorageBridgeCoOrdinatorRef = Context.ActorOf(Context.System.DI().Props<FileStorageBridgeCoOrdinatorActor>());
             Receive<StoreFilesMessage>(message => FileStorageBridgeCoOrdinatorRef.Forward(message));
             Receive<EachFileStoredMessage>(message => { });
 
+            //querying
             FileQueryBridgeCoOrdinatorRef = Context.ActorOf(Context.System.DI().Props<FileQueryBridgeCoOrdinatorActor>());
-            Receive<LoadFileContentMessages>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
-            Receive<LoadFileContentsResultMessages>(message =>
-            {
-                
-            });
+            Receive<LoadAllFileContentMessage>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
+            Receive<LoadFileContentsResultMessages>(message =>{});
+
+            //bulkloading
+            Receive<ListAllFilesByFolderNameMessage>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
+            
+            //unknowns
+            ReceiveAny(message => Sender.Tell("Unknown Message Received"));
         }
     }
 }

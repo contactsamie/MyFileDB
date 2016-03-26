@@ -1,6 +1,9 @@
-﻿using Akka.Actor;
+﻿using System.Collections.Generic;
+using Akka.Actor;
+using MyFileDB.ActorSystemLib;
+using MyFileDB.Common.Services;
 using MyFileDB.Core.Messages;
-using MyFileDB.Core.Services;
+
 
 namespace MyFileDB.Core.Actors
 {
@@ -15,6 +18,12 @@ namespace MyFileDB.Core.Actors
                 fileService.CreateDirectoryIfItDoesntExist(directory);
                 fileService.Write(directory + message.FileName, message.FileContent);
                 Sender.Tell(new EachFileStoredMessage());
+                
+                //tell to update file cache
+              ApplicationActorSystem.ActorReferences.ApplicationActorRef.Tell(new LoadAllFileContentMessage(new List<LoadFileContentMessage>()
+              {
+                  new LoadFileContentMessage(message.RootPath,message.FolderName,message.FileName,Sender)
+              }));
             });
         }
     }

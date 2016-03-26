@@ -1,6 +1,7 @@
 using System;
 using Autofac;
-using MyFileDB.Core.Services;
+using MyFileDB.Common.Services;
+
 
 namespace MyFileDB.Tests
 {
@@ -15,7 +16,7 @@ namespace MyFileDB.Tests
                 return Container;
             }
             var builder = new ContainerBuilder();
-            builder.RegisterType<FakeFileService>().As<IFileService>();
+            builder.RegisterType<InMemoryFileService>().As<IFileService>();
             if (builderFunc != null)
             {
                 builderFunc(builder);

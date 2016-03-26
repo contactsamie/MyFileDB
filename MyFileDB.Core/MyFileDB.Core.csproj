@@ -72,10 +72,8 @@
     <Compile Include="Messages\LoadFileContentsResultMessages.cs" />
     <Compile Include="Messages\StoreFilesMessage.cs" />
     <Compile Include="Messages\StoreOneFileMessage.cs" />
-    <Compile Include="Services\FileService.cs" />
     <Compile Include="Actors\FileStorageBridgeActor.cs" />
     <Compile Include="Actors\FileStorageBridgeCoOrdinatorActor.cs" />
-    <Compile Include="Services\IFileService.cs" />
     <Compile Include="SystemActor.cs" />
     <Compile Include="Messages\PingMessage.cs" />
     <Compile Include="Messages\PongMessage.cs" />
@@ -88,6 +86,10 @@
     <ProjectReference Include="..\MyFileDB.ActorSystemLib\MyFileDB.ActorSystemLib.csproj">
       <Project>{4C52498F-1246-44C0-A404-ACBC1D795D5A}</Project>
       <Name>MyFileDB.ActorSystemLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyFileDB.Common\MyFileDB.Common.csproj">
+      <Project>{19DCC9F5-EE95-48BC-85EE-256B6B971176}</Project>
+      <Name>MyFileDB.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

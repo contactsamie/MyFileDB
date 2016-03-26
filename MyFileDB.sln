@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFileDB.DependencyLib", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFileDB.ActorSystemLib", "MyFileDB.ActorSystemLib\MyFileDB.ActorSystemLib.csproj", "{4C52498F-1246-44C0-A404-ACBC1D795D5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFileDB.Common", "MyFileDB.Common\MyFileDB.Common.csproj", "{19DCC9F5-EE95-48BC-85EE-256B6B971176}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4C52498F-1246-44C0-A404-ACBC1D795D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C52498F-1246-44C0-A404-ACBC1D795D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C52498F-1246-44C0-A404-ACBC1D795D5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19DCC9F5-EE95-48BC-85EE-256B6B971176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19DCC9F5-EE95-48BC-85EE-256B6B971176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19DCC9F5-EE95-48BC-85EE-256B6B971176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19DCC9F5-EE95-48BC-85EE-256B6B971176}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

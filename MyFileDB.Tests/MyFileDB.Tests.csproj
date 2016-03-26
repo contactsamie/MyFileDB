@@ -79,7 +79,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="TestDependencyResolver.cs" />
-    <Compile Include="FakeFileService.cs" />
+    <Compile Include="InMemoryFileService.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -90,6 +90,10 @@
     <ProjectReference Include="..\MyFileDB.ActorSystemLib\MyFileDB.ActorSystemLib.csproj">
       <Project>{4C52498F-1246-44C0-A404-ACBC1D795D5A}</Project>
       <Name>MyFileDB.ActorSystemLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyFileDB.Common\MyFileDB.Common.csproj">
+      <Project>{19DCC9F5-EE95-48BC-85EE-256B6B971176}</Project>
+      <Name>MyFileDB.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyFileDB.Core\MyFileDB.Core.csproj">
       <Project>{3437b223-4cca-46a6-9415-67331c029f5f}</Project>

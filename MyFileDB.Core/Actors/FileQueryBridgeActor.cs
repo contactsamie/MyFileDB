@@ -1,6 +1,6 @@
 using Akka.Actor;
+using MyFileDB.Common.Services;
 using MyFileDB.Core.Messages;
-using MyFileDB.Core.Services;
 
 namespace MyFileDB.Core.Actors
 {
@@ -14,7 +14,7 @@ namespace MyFileDB.Core.Actors
                 fileService.CreateDirectoryIfItDoesntExist(directory);
                 var fileNme = directory + message.FileName;
                 var content = fileService.Read(fileNme);
-                Sender.Tell(new FileContentMessage(fileNme, content,message.CallBackActorRef));
+                Sender.Tell(new FileContentUpdateMessage(fileNme, content,message.CallBackActorRef));
             });
         }
     }

@@ -13,23 +13,25 @@ namespace MyFileDB.Core.Actors
     {
         private IActorRef FileQueryBridgeRef { set; get; }
 
-        private Dictionary<string, FileContentMessage> FileContentMessages { set; get; }
+        private Dictionary<string, FileContentUpdateMessage> FileContentMessages { set; get; }
 
         public FileQueryBridgeCoOrdinatorActor()
         {
-            FileContentMessages = new Dictionary<string, FileContentMessage>();
+            FileContentMessages = new Dictionary<string, FileContentUpdateMessage>();
 
             FileQueryBridgeRef = Context.System.ActorOf(Context.System.DI().Props<FileQueryBridgeActor>().WithRouter(new RoundRobinPool(5)));
 
-            Receive<LoadFileContentMessages>(message =>
+            Receive<LoadAllFileContentMessage>(message =>
             {
                 foreach (var fileContentMessage in message.FileContentMessages)
                 {
                     FileQueryBridgeRef.Tell(fileContentMessage);
                 }
             });
-
-            Receive<FileContentMessage>(message =>
+            
+          
+            //update cache and call back
+            Receive<FileContentUpdateMessage>(message =>
             {
                 if (FileContentMessages.ContainsKey(message.FileName))
                 {
@@ -44,6 +46,13 @@ namespace MyFileDB.Core.Actors
                     message.CallBackActorRef.Tell(new LoadFileContentsResultMessages(FileContentMessages.Select(x => x.Value).ToList()));
                 }
             });
+
+            Receive<ListAllFilesByFolderNameMessage>(message =>
+            {
+                Sender.Tell(FileContentMessages.Select(x => x.Value).ToList());
+            });
+
+
         }
 
         // e.g. Restart the child, if 10 exceptions occur in 30 seconds or less, then stop the actor
