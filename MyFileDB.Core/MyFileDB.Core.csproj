@@ -84,7 +84,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MyFileDB.ActorSystemLib\MyFileDB.ActorSystemLib.csproj">
+      <Project>{4C52498F-1246-44C0-A404-ACBC1D795D5A}</Project>
+      <Name>MyFileDB.ActorSystemLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

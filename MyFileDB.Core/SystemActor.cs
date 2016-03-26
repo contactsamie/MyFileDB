@@ -20,6 +20,10 @@ namespace MyFileDB.Core
 
             FileQueryBridgeCoOrdinatorRef = Context.ActorOf(Context.System.DI().Props<FileQueryBridgeCoOrdinatorActor>());
             Receive<LoadFileContentMessages>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
+            Receive<LoadFileContentsResultMessages>(message =>
+            {
+                
+            });
         }
     }
 }

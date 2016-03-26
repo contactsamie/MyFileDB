@@ -8,13 +8,13 @@ namespace MyFileDB.Core.Actors
     {
         public FileQueryBridgeActor(IFileService fileService)
         {
-            Receive<StoreOneFileMessage>(message =>
+            Receive<LoadFileContentMessage>(message =>
             {
                 var directory = message.RootPath + "/" + message.FolderName + "/";
                 fileService.CreateDirectoryIfItDoesntExist(directory);
                 var fileNme = directory + message.FileName;
                 var content = fileService.Read(fileNme);
-                Sender.Tell(new FileContentMessage(fileNme, content));
+                Sender.Tell(new FileContentMessage(fileNme, content,message.CallBackActorRef));
             });
         }
     }

@@ -86,16 +86,17 @@ namespace MyFileDB.Tests
             ApplicationActorSystem.Create<SystemActor>(TestDependencyResolver.GetContainer(_builderMethod), Sys);
 
             var myFileDbActorRef = ApplicationActorSystem.ActorReferences.ApplicationActorRef;
-
+           
             //Act
             myFileDbActorRef.Tell(new LoadFileContentMessages(new List<LoadFileContentMessage>()
             {
-             new   LoadFileContentMessage(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Akka-files", "sample-" + DateTime.Now.Ticks + ".json")
+             new   LoadFileContentMessage(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Akka-files", "sample-" + DateTime.Now.Ticks + ".json",TestActor)
             }));
 
             //Assert
-            AwaitAssert(() => ExpectMsg<LoadFileContentsResultMessages>(x => x.FileContentMessages != null));
+            AwaitAssert(() => ExpectMsg<LoadFileContentsResultMessages>(),TimeSpan.FromSeconds(10));
         }
+       
 
         [TestMethod]
         public void when_file_list_is_requested_it_should_return_all()

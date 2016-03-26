@@ -5,6 +5,7 @@ using MyFileDB.Core.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyFileDB.ActorSystemLib;
 
 namespace MyFileDB.Core.Actors
 {
@@ -24,10 +25,8 @@ namespace MyFileDB.Core.Actors
             {
                 foreach (var fileContentMessage in message.FileContentMessages)
                 {
-                    FileQueryBridgeRef.Forward(fileContentMessage);
+                    FileQueryBridgeRef.Tell(fileContentMessage);
                 }
-
-                Sender.Tell(new LoadFileContentsResultMessages(FileContentMessages.Select(x => x.Value).ToList()));
             });
 
             Receive<FileContentMessage>(message =>
@@ -39,6 +38,10 @@ namespace MyFileDB.Core.Actors
                 else
                 {
                     FileContentMessages.Add(message.FileName, message);
+                }
+                if (message.CallBackActorRef != null)
+                {
+                    message.CallBackActorRef.Tell(new LoadFileContentsResultMessages(FileContentMessages.Select(x => x.Value).ToList()));
                 }
             });
         }
