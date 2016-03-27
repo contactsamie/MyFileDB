@@ -24,5 +24,10 @@ namespace MyFileDB.Common.Services
                 System.IO.Directory.CreateDirectory(directory);
             }
         }
+
+        public void Delete(string s)
+        {
+            System.IO.File.Delete(s);
+        }
     }
 }

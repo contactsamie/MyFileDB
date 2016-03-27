@@ -60,11 +60,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\FileDeleteBridgeActor.cs" />
+    <Compile Include="Actors\FileDeleteBridgeCoOrdinatorActor.cs" />
     <Compile Include="Actors\FileQueryBridgeActor.cs" />
     <Compile Include="Actors\FileQueryBridgeCoOrdinatorActor.cs" />
+    <Compile Include="Messages\AFileIdentityMessage.cs" />
+    <Compile Include="Messages\DeleteFilesMessage.cs" />
+    <Compile Include="Messages\DeleteOneFileMessage.cs" />
+    <Compile Include="Messages\EachFileDeletedMessage.cs" />
     <Compile Include="Messages\EachFileStoredMessage.cs" />
+    <Compile Include="Messages\FileContentDeleteMessage.cs" />
     <Compile Include="Messages\FileContentMessage.cs" />
     <Compile Include="Messages\FilesByFolderResultMessage.cs" />
+    <Compile Include="Messages\FilesDeletedMessage.cs" />
     <Compile Include="Messages\FilesStoredMessage.cs" />
     <Compile Include="Messages\ListAllFilesByFolderNameMessage.cs" />
     <Compile Include="Messages\LoadFileContentMessage.cs" />

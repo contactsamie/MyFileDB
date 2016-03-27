@@ -11,13 +11,13 @@ namespace MyFileDB.Core.Actors
     {
         public FileStorageBridgeActor(IFileService fileService)
         {
-            Receive<StoreOneFileMessage>(message =>
+            Receive<StoreOneFileIdentityMessage>(message =>
             {
                 //todo store file
                 var directory = message.RootPath + "/" + message.FolderName + "/";
                 fileService.CreateDirectoryIfItDoesntExist(directory);
                 fileService.Write(directory + message.FileName, message.FileContent);
-                Sender.Tell(new EachFileStoredMessage());
+                Sender.Tell(new EachFileStoredMessage(message));
                 
                 //tell to update file cache
               ApplicationActorSystem.ActorReferences.ApplicationActorRef.Tell(new LoadAllFileContentMessage(new List<LoadFileContentMessage>()

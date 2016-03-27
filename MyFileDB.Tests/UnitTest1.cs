@@ -40,9 +40,9 @@ namespace MyFileDB.Tests
             var myFileDbActorRef = ApplicationActorSystem.ActorReferences.ApplicationActorRef;
 
             //Act
-            myFileDbActorRef.Tell(new StoreFilesMessage(new List<StoreOneFileMessage>()
+            myFileDbActorRef.Tell(new StoreFilesMessage(new List<StoreOneFileIdentityMessage>()
             {
-                new StoreOneFileMessage()
+                new StoreOneFileIdentityMessage()
                 {
                     FileName = "sample-"+DateTime.Now.Ticks+".json",
                     FolderName = "Akka-files",
@@ -68,9 +68,9 @@ namespace MyFileDB.Tests
             var rootPath = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             //Act
-            myFileDbActorRef.Tell(new StoreFilesMessage(new List<StoreOneFileMessage>()
+            myFileDbActorRef.Tell(new StoreFilesMessage(new List<StoreOneFileIdentityMessage>()
             {
-                new StoreOneFileMessage()
+                new StoreOneFileIdentityMessage()
                 {
                     FileName =fileNme,
                     FolderName = folder,
@@ -167,9 +167,9 @@ namespace MyFileDB.Tests
 
         private void StoreFile(IActorRef myFileDbActorRef, string fileNme, string folder, string rootPath, string fileContent)
         {
-            myFileDbActorRef.Tell(new StoreFilesMessage(new List<StoreOneFileMessage>()
+            myFileDbActorRef.Tell(new StoreFilesMessage(new List<StoreOneFileIdentityMessage>()
             {
-                new StoreOneFileMessage()
+                new StoreOneFileIdentityMessage()
                 {
                     FileName = fileNme,
                     FolderName = folder,
@@ -178,7 +178,7 @@ namespace MyFileDB.Tests
                 }
             }));
 
-            AwaitAssert(() => ExpectMsg<EachFileStoredMessage>());
+            AwaitAssert(() => ExpectMsg<EachFileStoredMessage>(x=>x.FileStoredMessage.FileName==fileNme && x.FileStoredMessage.FileContent==fileContent));
         }
 
 
@@ -219,6 +219,93 @@ namespace MyFileDB.Tests
             //Assert
             Assert.IsTrue(files!=null);
             Assert.AreEqual(files.Count, totalNumberOfFiles);
+        }
+
+
+        [TestMethod]
+        public void it_should_be_able_to_delete_a_file_from_folder()
+        {
+            //Arrange
+            ApplicationActorSystem.Create<SystemActor>(TestDependencyResolver.GetContainer(_builderMethod), Sys);
+
+            var myFileDbActorRef = ApplicationActorSystem.ActorReferences.ApplicationActorRef;
+            var fileContent = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+            var fileNme = "sample-" + DateTime.Now.Ticks + ".json";
+            var folder = "Akka-files";
+            var rootPath = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            //Act
+            StoreFile(myFileDbActorRef, fileNme, folder, rootPath, fileContent);
+
+            //Assert
+            AwaitAssert(() => ExpectMsg<LoadFileContentsResultMessages>(x => x.FileContentMessages.Count == 1 && x.FileContentMessages.TrueForAll(y => y.FileContent == fileContent)), TimeSpan.FromSeconds(100));
+
+            myFileDbActorRef.Tell(new DeleteFilesMessage(new List<DeleteOneFileIdentityMessage>()
+            {
+                new DeleteOneFileIdentityMessage()
+                {
+                    FileName = fileNme,
+                    FolderName = folder,
+                    RootPath = rootPath
+                }
+            }));
+
+            AwaitAssert(() => ExpectMsg<LoadFileContentsResultMessages>(x => x.FileContentMessages.Count == 0), TimeSpan.FromSeconds(2000));
+
+            var files = myFileDbActorRef.Ask(new ListAllFilesByFolderNameMessage(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Akka-files")).Result as List<FileContentUpdateMessage>;
+
+            //Assert
+            Assert.IsTrue(files != null);
+            Assert.AreEqual(files.Count, 0);
+
+        }
+
+
+        [TestMethod]
+        public void it_should_be_able_to_delete_a_file_among_other_files_from_folder()
+        {
+            //Arrange
+            ApplicationActorSystem.Create<SystemActor>(TestDependencyResolver.GetContainer(_builderMethod), Sys);
+
+            var myFileDbActorRef = ApplicationActorSystem.ActorReferences.ApplicationActorRef;
+            var fileContent = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+            var folder = "Akka-files";
+            var totalNumberOfFiles = 10;
+
+            var rootPath = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var fileNames = new List<string>();
+
+            var loadFileContentMessages = new List<LoadFileContentMessage>();
+            for (var i = 0; i < totalNumberOfFiles; i++)
+            {
+                var fileNme = "sample-" + i + ".json";
+                fileNames.Add(fileNme);
+                loadFileContentMessages.Add(new LoadFileContentMessage(rootPath, folder, fileNme, TestActor));
+            }
+
+            //Act
+            StoreFile(myFileDbActorRef, fileNames, folder, rootPath, fileContent);
+
+            //Assert
+            AwaitAssert(() => ExpectMsg<LoadFileContentsResultMessages>(x => x.FileContentMessages.Count == totalNumberOfFiles && x.FileContentMessages.TrueForAll(y => y.FileContent == fileContent)), TimeSpan.FromSeconds(100));
+
+            myFileDbActorRef.Tell(new DeleteFilesMessage(new List<DeleteOneFileIdentityMessage>()
+            {
+                new DeleteOneFileIdentityMessage()
+                {
+                    FileName = fileNames[0],
+                    FolderName = folder,
+                    RootPath = rootPath
+                }
+            }));
+
+            AwaitAssert(() => ExpectMsg<LoadFileContentsResultMessages>(x => x.FileContentMessages.Count == totalNumberOfFiles-1 && !x.FileContentMessages.Exists(y=>y.FileName== fileNames[0])), TimeSpan.FromSeconds(2000));
+
+            var files = myFileDbActorRef.Ask(new ListAllFilesByFolderNameMessage(System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Akka-files")).Result as List<FileContentUpdateMessage>;
+
+            //Assert
+            Assert.IsTrue(files != null);
+            Assert.AreEqual(files.Count,totalNumberOfFiles-1);
+
         }
     }
 }

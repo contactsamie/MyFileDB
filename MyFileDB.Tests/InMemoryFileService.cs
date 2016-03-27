@@ -40,5 +40,13 @@ namespace MyFileDB.Tests
         public void CreateDirectoryIfItDoesntExist(string pathName)
         {
         }
+
+        public void Delete(string fileName)
+        {
+            if (Exists(fileName))
+            {
+                 InMemoryFileStorage.Remove(fileName);
+            }
+        }
     }
 }

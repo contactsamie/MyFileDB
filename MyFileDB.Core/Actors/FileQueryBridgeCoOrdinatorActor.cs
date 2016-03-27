@@ -5,7 +5,6 @@ using MyFileDB.Core.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyFileDB.ActorSystemLib;
 
 namespace MyFileDB.Core.Actors
 {
@@ -28,8 +27,7 @@ namespace MyFileDB.Core.Actors
                     FileQueryBridgeRef.Tell(fileContentMessage);
                 }
             });
-            
-          
+
             //update cache and call back
             Receive<FileContentUpdateMessage>(message =>
             {
@@ -47,12 +45,22 @@ namespace MyFileDB.Core.Actors
                 }
             });
 
+            Receive<FileContentDeleteMessage>(message =>
+            {
+                if (FileContentMessages.ContainsKey(message.FileName))
+                {
+                    FileContentMessages.Remove(message.FileName);
+                }
+                if (message.CallBackActorRef != null)
+                {
+                    message.CallBackActorRef.Tell(new LoadFileContentsResultMessages(FileContentMessages.Select(x => x.Value).ToList()));
+                }
+            });
+
             Receive<ListAllFilesByFolderNameMessage>(message =>
             {
                 Sender.Tell(FileContentMessages.Select(x => x.Value).ToList());
             });
-
-
         }
 
         // e.g. Restart the child, if 10 exceptions occur in 30 seconds or less, then stop the actor

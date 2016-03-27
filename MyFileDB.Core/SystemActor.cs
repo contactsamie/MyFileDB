@@ -9,6 +9,8 @@ namespace MyFileDB.Core
     {
         private IActorRef FileStorageBridgeCoOrdinatorRef { get; set; }
         private IActorRef FileQueryBridgeCoOrdinatorRef { set; get; }
+        private IActorRef FileDeleteBridgeCoOrdinatorActorRef { set; get; }
+    
 
         public SystemActor()
         {
@@ -23,11 +25,17 @@ namespace MyFileDB.Core
             //querying
             FileQueryBridgeCoOrdinatorRef = Context.ActorOf(Context.System.DI().Props<FileQueryBridgeCoOrdinatorActor>());
             Receive<LoadAllFileContentMessage>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
-            Receive<LoadFileContentsResultMessages>(message =>{});
+            Receive<LoadFileContentsResultMessages>(message =>{ });
 
             //bulkloading
             Receive<ListAllFilesByFolderNameMessage>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
-            
+
+
+            //deleting
+            FileDeleteBridgeCoOrdinatorActorRef= Context.ActorOf(Context.System.DI().Props<FileDeleteBridgeCoOrdinatorActor>());
+            Receive<DeleteFilesMessage>(message => FileDeleteBridgeCoOrdinatorActorRef.Forward(message));
+            Receive<EachFileDeletedMessage>(message => { });
+
             //unknowns
             ReceiveAny(message => Sender.Tell("Unknown Message Received"));
         }

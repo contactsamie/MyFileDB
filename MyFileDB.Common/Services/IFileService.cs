@@ -9,5 +9,7 @@ namespace MyFileDB.Common.Services
         bool Exists(string fileName);
 
         void CreateDirectoryIfItDoesntExist(string pathName);
+
+        void Delete(string s);
     }
 }

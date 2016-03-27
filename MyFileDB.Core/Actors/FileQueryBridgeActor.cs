@@ -13,8 +13,17 @@ namespace MyFileDB.Core.Actors
                 var directory = message.RootPath + "/" + message.FolderName + "/";
                 fileService.CreateDirectoryIfItDoesntExist(directory);
                 var fileNme = directory + message.FileName;
-                var content = fileService.Read(fileNme);
-                Sender.Tell(new FileContentUpdateMessage(fileNme, content,message.CallBackActorRef));
+                if (fileService.Exists(fileNme))
+                {
+                    var content = fileService.Read(fileNme);
+                    Sender.Tell(new FileContentUpdateMessage(fileNme, content, message.CallBackActorRef));
+                }
+                else
+                {
+                    Sender.Tell(new FileContentDeleteMessage(fileNme,  message.CallBackActorRef));
+                }
+
+
             });
         }
     }

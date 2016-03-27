@@ -4,11 +4,11 @@ namespace MyFileDB.Core.Messages
 {
     public class StoreFilesMessage
     {
-        public StoreFilesMessage(List<StoreOneFileMessage> storeOneFileMessages)
+        public StoreFilesMessage(List<StoreOneFileIdentityMessage> storeOneFileMessages)
         {
-            StoreOneFileMessages = storeOneFileMessages ?? new List<StoreOneFileMessage>();
+            StoreOneFileMessages = storeOneFileMessages ?? new List<StoreOneFileIdentityMessage>();
         }
 
-        public List<StoreOneFileMessage> StoreOneFileMessages { private set; get; }
+        public List<StoreOneFileIdentityMessage> StoreOneFileMessages { private set; get; }
     }
 }
