@@ -1,6 +1,7 @@
 using Akka.Actor;
 using Akka.DI.Core;
 using Akka.Routing;
+using MyFileDB.Common.Services;
 using MyFileDB.Core.Messages;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace MyFileDB.Core.Actors
         {
             FileContentMessages = new Dictionary<string, FileContentUpdateMessage>();
 
-            FileQueryBridgeRef = Context.System.ActorOf(Context.System.DI().Props<FileQueryBridgeActor>().WithRouter(new RoundRobinPool(5)));
+            FileQueryBridgeRef = Context.System.ActorOf(Context.System.DI().Props<FileQueryBridgeActor>().WithRouter(SystemActor.CommonRouterConfig));
 
             Receive<LoadAllFileContentMessage>(message =>
             {
@@ -57,6 +58,20 @@ namespace MyFileDB.Core.Actors
                 }
             });
 
+            Receive<LoadFileContentMessage>(message =>
+            {
+                FileContentUpdateMessage file;
+                if (FileContentMessages.ContainsKey(message.FileName))
+                {
+                    file = FileContentMessages[message.FileName];
+                }
+                else
+                {
+                    file = new FileContentUpdateMessage(message.FileName, new FileContent(null, null, message.FileContentBodyType), message.CallBackActorRef, message.FolderName, message.RootPath);
+                }
+
+                Sender.Tell(file);
+            });
             Receive<ListAllFilesByFolderNameMessage>(message =>
             {
                 Sender.Tell(FileContentMessages.Select(x => x.Value).ToList());

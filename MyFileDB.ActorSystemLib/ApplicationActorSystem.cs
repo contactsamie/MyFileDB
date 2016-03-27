@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Akka.Actor;
 using Akka.DI.AutoFac;
 using Akka.DI.Core;
@@ -14,6 +15,7 @@ namespace MyFileDB.ActorSystemLib
 
         public static void Create<T>(IContainer container, ActorSystem actorSystem=null) where T : ActorBase
         {
+            
             /*
             When you create an actor through the DI subsystem, 
             and you pass it Props of type ProductActor. The DI 
@@ -33,7 +35,14 @@ namespace MyFileDB.ActorSystemLib
 
         public static async void ShutDown()
         {
-            await  ActorSystem.Terminate();
+             await ActorSystem.Terminate();
+            //Container.Dispose();
+            //ActorSystem.Dispose();
+            //ActorReferences.ApplicationActorRef = null;
+            //Container = null;
+            //ActorSystem = null;
+
+       
         }
 
         public static class ActorReferences

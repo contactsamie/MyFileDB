@@ -1,7 +1,9 @@
+using MyFileDB.Common.Services;
+
 namespace MyFileDB.Core.Messages
 {
-    public class StoreOneFileIdentityMessage: AFileIdentityMessage
+    public class StoreOneFileIdentityMessage : AFileIdentityMessage
     {
-        public string FileContent { get; set; }
+        public FileContent FileContent { get; set; }
     }
 }

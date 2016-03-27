@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Akka.Actor;
+﻿using Akka.Actor;
 using MyFileDB.ActorSystemLib;
 using MyFileDB.Common.Services;
 using MyFileDB.Core.Messages;
+using System.Collections.Generic;
 
 namespace MyFileDB.Core.Actors
 {
@@ -10,7 +10,6 @@ namespace MyFileDB.Core.Actors
     {
         public FileDeleteBridgeActor(IFileService fileService)
         {
-            
             Receive<DeleteOneFileIdentityMessage>(message =>
             {
                 //todo store file
@@ -22,7 +21,7 @@ namespace MyFileDB.Core.Actors
                 //tell to update file cache
                 ApplicationActorSystem.ActorReferences.ApplicationActorRef.Tell(new LoadAllFileContentMessage(new List<LoadFileContentMessage>()
                 {
-                    new LoadFileContentMessage(message.RootPath,message.FolderName,message.FileName,Sender)
+                    new LoadFileContentMessage(message.RootPath,message.FolderName,message.FileName,Sender,message.FileContentBodyType)
                 }));
             });
         }

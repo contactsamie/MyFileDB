@@ -15,15 +15,14 @@ namespace MyFileDB.Core.Actors
                 var fileNme = directory + message.FileName;
                 if (fileService.Exists(fileNme))
                 {
-                    var content = fileService.Read(fileNme);
-                    Sender.Tell(new FileContentUpdateMessage(fileNme, content, message.CallBackActorRef));
+                    var content = fileService.Read(fileNme, message.FileContentBodyType);
+
+                    Sender.Tell(new FileContentUpdateMessage(message.FileName, content, message.CallBackActorRef, message.FolderName, message.RootPath));
                 }
                 else
                 {
-                    Sender.Tell(new FileContentDeleteMessage(fileNme,  message.CallBackActorRef));
+                    Sender.Tell(new FileContentDeleteMessage(message.FileName, message.CallBackActorRef, message.FolderName, message.RootPath));
                 }
-
-
             });
         }
     }

@@ -78,6 +78,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DatabaseTests.cs" />
     <Compile Include="TestDependencyResolver.cs" />
     <Compile Include="InMemoryFileService.cs" />
     <Compile Include="UnitTest1.cs" />
@@ -98,6 +99,10 @@
     <ProjectReference Include="..\MyFileDB.Core\MyFileDB.Core.csproj">
       <Project>{3437b223-4cca-46a6-9415-67331c029f5f}</Project>
       <Name>MyFileDB.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyFileDB.DBApi\MyFileDB.DBApi.csproj">
+      <Project>{53acdeee-0e6f-4330-80ed-d2bef7c9bda9}</Project>
+      <Name>MyFileDB.DBApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyFileDB.DependencyLib\MyFileDB.DependencyLib.csproj">
       <Project>{b2bcc727-3edd-448f-98a1-320e512e29e5}</Project>
