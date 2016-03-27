@@ -13,7 +13,7 @@ namespace MyFileDB.Core.Actors
     {
         private IActorRef FileQueryBridgeRef { set; get; }
 
-        private Dictionary<string, FileContentUpdateMessage> FileContentMessages { set; get; }
+        private Dictionary<string, FileContentUpdateMessage> FileContentMessages {  get; }
 
         public FileQueryBridgeCoOrdinatorActor()
         {

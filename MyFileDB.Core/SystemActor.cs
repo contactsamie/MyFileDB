@@ -16,7 +16,7 @@ namespace MyFileDB.Core
 
         public SystemActor(RouterConfig routerConfig=null)
         {
-            CommonRouterConfig = routerConfig?? new RoundRobinPool(5);
+            CommonRouterConfig = routerConfig?? new RoundRobinPool(5);//throughput things
             //pinginh
             Receive<PingMessage>(message => Sender.Tell(new PongMessage()));
 
@@ -26,7 +26,8 @@ namespace MyFileDB.Core
             Receive<EachFileStoredMessage>(message => { });
 
             //querying
-            FileQueryBridgeCoOrdinatorRef = Context.ActorOf(Context.System.DI().Props<FileQueryBridgeCoOrdinatorActor>().WithRouter(CommonRouterConfig));
+            //cant do routing since it holds cache of query result
+            FileQueryBridgeCoOrdinatorRef = Context.ActorOf(Context.System.DI().Props<FileQueryBridgeCoOrdinatorActor>());
             Receive<LoadAllFileContentMessage>(message => FileQueryBridgeCoOrdinatorRef.Forward(message));
             Receive<LoadFileContentsResultMessages>(message =>{ });
             //direct file access

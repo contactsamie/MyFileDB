@@ -12,7 +12,7 @@ namespace MyFileDB.Core.Actors
 
         public FileStorageBridgeCoOrdinatorActor()
         {
-            FileStorageBridgeActorRef = Context.System.ActorOf(Context.System.DI().Props<FileStorageBridgeActor>().WithRouter(SystemActor.CommonRouterConfig));
+            FileStorageBridgeActorRef = Context.System.ActorOf(Context.System.DI().Props<FileStorageBridgeActor>().WithRouter(new RoundRobinPool(10, new DefaultResizer(1, 20))));
 
             Receive<StoreFilesMessage>(message =>
             {

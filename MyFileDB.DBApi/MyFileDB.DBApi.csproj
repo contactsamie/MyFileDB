@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentCreateResult.cs" />
     <Compile Include="IMyFileDbDocumentSession.cs" />
     <Compile Include="MyFileDbDocumentSession.cs" />
     <Compile Include="MyFileDbDocumentStore.cs" />

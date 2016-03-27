@@ -12,10 +12,14 @@ namespace MyFileDB.DBApi
 
         T Load<T>(string id) where T : class;
 
-        void Create<T>(T document,string id);
+        object Load(Type type, string id);
 
-        void SaveChanges();
+        DocumentCreateResult Create<T>(T document,bool withoutWaiting=false,string id=null) where T : class;
 
-        IEnumerable<T> Query<T>(Func<IQueryable<T>, IQueryable<T>> queryFunction ) where T : class;
+        
+
+        void SaveChanges(bool withoutWaiting = false);
+        //todo - not safe by default
+        IEnumerable<T> Query<T>(Func<IQueryable<T>, IQueryable<T>> queryFunction=null ) where T : class;
     }
 }

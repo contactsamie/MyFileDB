@@ -19,7 +19,12 @@ namespace MyFileDB.DBApi
 
         public IMyFileDbDocumentSession OpenSession()
         {
-            if (Session == null) throw new Exception(nameof(Session)+" Not Set");
+            Session = new MyFileDbDocumentSession(this);
+            MyFileDbActorRef = ApplicationActorSystem.ActorReferences.ApplicationActorRef;
+            if (Session == null)
+            {
+                throw new Exception("Session not set");
+            }
             return Session;
         }
 
@@ -33,18 +38,18 @@ namespace MyFileDB.DBApi
             store.FolderName = store.FolderName ?? "";
             Store = store;
 
+      
             if (ApplicationActorSystem.ActorReferences.ApplicationActorRef != null) return;
             ApplicationActorSystem.Create<SystemActor>(container);
-            MyFileDbActorRef = ApplicationActorSystem.ActorReferences.ApplicationActorRef;
+           
 
-            Session=new MyFileDbDocumentSession(this);
+            
         }
-
-
 
         public void Dispose()
         {
-            ApplicationActorSystem.ShutDown();
+            //document store dispose should not shut down akka
+           // ApplicationActorSystem.ShutDown();
         }
     }
 }
